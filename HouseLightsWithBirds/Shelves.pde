@@ -13,7 +13,7 @@ class Shelves {
     b3 = new Ball(602, 305, "5", 1);
     b4 = new Ball(834, 158, "6", 1); 
     b1_dup = new Ball(1143, 413, "3", 1);
-    
+   
     wallSouth = new Wall(61, 293, 0, b1, b2);
     float southWidth = wallSouth.getWidth();
     for (int i = 0; i <= 7; i++) {

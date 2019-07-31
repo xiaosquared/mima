@@ -1,3 +1,19 @@
+public enum MsgType { 
+  TOUCH, UNTOUCH, OTHER;
+  
+  public static MsgType getType(String msg) {
+    switch (msg.charAt(8)) {
+      case 't':
+        return MsgType.TOUCH;
+      case 'x':
+        return MsgType.UNTOUCH;
+      default:
+        return MsgType.OTHER; 
+    }
+  }
+}
+
+
 class BallManager {
   ArrayList<Ball> balls;
   HashMap<String, Ball> ballsById;
@@ -8,18 +24,18 @@ class BallManager {
  
   BallManager() {
     balls = new ArrayList<Ball>();
-    balls.add(new Ball(260, 836, "1", 1));
-    balls.add(new Ball(260, 780, "2", 1));
-    balls.add(new Ball(14, 723, "3", 2));
-    balls.add(new Ball(14, 626, "4", 2));
-    balls.add(new Ball(260, 627, "5", 2));
-    balls.add(new Ball(260, 489, "6", 2));
-    balls.add(new Ball(14, 324, "7", 3));
-    balls.add(new Ball(14, 259, "8", 3));
-    balls.add(new Ball(260, 272, "9", 3));
-    balls.add(new Ball(260, 215, "0", 3));
-    balls.add(new Ball(14, 107, "-", 4));
-    balls.add(new Ball(14, 50, "=", 4));
+    balls.add(new Ball(230, 801, "1", 1));
+    balls.add(new Ball(230, 734, "2", 1));
+    balls.add(new Ball(14, 593, "3", 2));
+    balls.add(new Ball(14, 544, "4", 2));
+    balls.add(new Ball(230, 541, "5", 2));
+    balls.add(new Ball(230, 489, "6", 2));
+    balls.add(new Ball(14, 407, "7", 3));
+    balls.add(new Ball(14, 347, "8", 3));
+    balls.add(new Ball(230, 347, "9", 3));
+    balls.add(new Ball(230, 278, "0", 3));
+    balls.add(new Ball(14, 181, "-", 4));
+    balls.add(new Ball(14, 118, "=", 4));
     
     ballsById = new HashMap<String, Ball>();
     for (Ball b : balls) {
@@ -43,9 +59,30 @@ class BallManager {
       return f1_index;
   }
   
+  String getBallId(String msg) {
+    return msg.substring(26, 27);  
+  }
+
+  void update() {
+    int currentTime = millis();
+    for (Ball b : balls) {
+      if (b.touchState == TouchState.TOUCH_INIT && (currentTime - b.touchInitTime) > DEBOUNCE_TIME) {
+        b.touchState = TouchState.TOUCHED;
+        b.lastTouchedTime = currentTime;
+        onPressed(b);
+      }
+      
+      else if (b.touchState == TouchState.RELEASE_INIT && (currentTime - b.releaseInitTime) > DEBOUNCE_TIME) {
+        b.touchState = TouchState.RELEASED;
+        b.lastTouchedInterval = currentTime - b.lastTouchedTime;
+        onReleased(b);
+      }
+    }
+  }
+
   Ball onKeyPress(String id) {
     for (Ball b : balls) {
-      if (b.onKeyPress(id))
+      if (b.onPress(id))
         return b;
     }
     return null;
@@ -53,7 +90,7 @@ class BallManager {
   
   Ball onKeyRelease(String id) {
     for (Ball b : balls) {
-      if(b.onKeyRelease(id))
+      if(b.onRelease(id))
         return b;
     }
     return null;
@@ -82,5 +119,4 @@ class BallManager {
     }
     return false;
   }
-
 }

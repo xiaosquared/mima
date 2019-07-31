@@ -49,6 +49,7 @@ class Bird {
   
   void draw() {
     stroke(100);
+    strokeWeight(1);
     if (charging) {
       t = millis() - startTime;
       B = t/2000;
