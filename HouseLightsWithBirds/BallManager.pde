@@ -66,13 +66,13 @@ class BallManager {
   void update() {
     int currentTime = millis();
     for (Ball b : balls) {
-      if (b.touchState == TouchState.TOUCH_INIT && (currentTime - b.touchInitTime) > DEBOUNCE_TIME) {
+      if (b.touchState == TouchState.TOUCH_INIT && (currentTime - b.touchInitTime) > DEBOUNCE_TIME_TOUCH) {
         b.touchState = TouchState.TOUCHED;
         b.lastTouchedTime = currentTime;
         onPressed(b);
       }
       
-      else if (b.touchState == TouchState.RELEASE_INIT && (currentTime - b.releaseInitTime) > DEBOUNCE_TIME) {
+      else if (b.touchState == TouchState.RELEASE_INIT && (currentTime - b.releaseInitTime) > DEBOUNCE_TIME_UNTOUCH) {
         b.touchState = TouchState.RELEASED;
         b.lastTouchedInterval = currentTime - b.lastTouchedTime;
         onReleased(b);

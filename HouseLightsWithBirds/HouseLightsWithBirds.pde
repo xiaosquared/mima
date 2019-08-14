@@ -14,7 +14,7 @@ BirdManager birds;
 BallManager balls;
 
 // House Lights
-boolean bSendToHouses = false;
+boolean bSendToHouses = true;
 final String mappingFile = "mapping_coordinates.csv";
 final String targetIp = "192.168.4.100";
 ArtNetClient artnet;
@@ -49,7 +49,7 @@ void setup() {
   }
   
   if (bUseWebsocket)
-    wsc = new WebsocketClient(this, "ws://localhost:3333");
+    wsc = new WebsocketClient(this, "ws://192.168.0.101:3333");
 }
 
 void draw() {
