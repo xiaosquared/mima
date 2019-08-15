@@ -1,6 +1,7 @@
 import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
 import ch.bildspur.artnet.*;
+import processing.serial.*;
 import websockets.*;
 
 Floor f1, f2, f3, f4;
@@ -19,6 +20,11 @@ final String mappingFile = "mapping_coordinates.csv";
 final String targetIp = "192.168.4.100";
 ArtNetClient artnet;
 Mapper mapper;
+
+// Bird Lights
+boolean bUseBlinkyTape = true;
+BlinkyTape blinkyTape;
+final int OUTPUT_COUNT = 23;
 
 // Sensors
 boolean bUseWebsocket = true;
@@ -41,6 +47,9 @@ void setup() {
   shelves = new Shelves();
   birds = new BirdManager();
   balls = new BallManager();
+  
+  if (bUseBlinkyTape)
+    connectBlinkyTape();
   
   if (bSendToHouses) {
     artnet = new ArtNetClient(null);
@@ -92,6 +101,9 @@ void draw() {
     mapper.draw();
     popMatrix();
   }
+  
+  if (bUseBlinkyTape)
+    lightBlinkyBirds();
 }
 void mousePressed() {
   float x = mouseX; //- offset.x;
@@ -99,6 +111,23 @@ void mousePressed() {
   println(x + ", " + y);
 }
 
+void lightBlinkyBirds() {
+  ArrayList<Bird> birdlist = birds.getBirds();
+  blinkyTape.pushChannel(0);
+  for (int i = 0; i < OUTPUT_COUNT-1; i++) {
+    if (i >= 10 && i <= 15)
+      blinkyTape.pushChannel(0);
+    else {
+      int j = i;
+      if (i > 15)
+        j = i - 6;
+      Bird b = birdlist.get(j);
+      int val = b.getBrightness();
+      blinkyTape.pushChannel(val);
+    }
+  }
+  blinkyTape.update(); 
+}
 
 void onPressed(Ball b) {
   int floor = b.getFloor();
