@@ -104,6 +104,7 @@ class Ball {
     ellipse(position.x, position.y, diameter, diameter);
     
     fill(255);
+    textSize(16);
     text(id, position.x, position.y);
   }
 }

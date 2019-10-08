@@ -1,4 +1,31 @@
-// Filter out some ports we don't care about
+import processing.serial.*; 
+
+Serial arduinoPort;
+boolean on = false;
+
+void setup() {
+  size(200, 200);
+  String[] serialPorts = listPorts();
+  String portName = serialPorts[serialPorts.length-1];
+  arduinoPort = new Serial(this, portName, 9600);
+}
+
+void draw() {
+  background(0);  
+  if (on)
+    ellipse(width/2, height/2, 100, 100);
+}
+
+void keyPressed() {
+  arduinoPort.write("1");
+  on = true;
+}
+
+void keyReleased() {
+  arduinoPort.write("0");
+  on = false;
+}
+
 String[] listPorts() {
    ArrayList<String> ports = new ArrayList<String>();
    String OS = System.getProperty("os.name");
@@ -33,23 +60,3 @@ String[] listPorts() {
 
    return ports.toArray(new String[0]);
  }
-
-void connectBlinkyTape() {
-  println("Connect Blinky Tape");
-  String[] serialPorts = listPorts();
-  for (String p : serialPorts) {
-    println(p);
-  }
-  
-  if(serialPorts.length > 0) {
-    blinkyTape = new BlinkyTape(this, serialPorts[serialPorts.length-1], OUTPUT_COUNT);
-    
-  }
-}
-
-void connectArduino() {
-  String[] serialPorts = listPorts();
-  if (serialPorts.length > 0) {
-    arduinoPort = new Serial(this, serialPorts[serialPorts.length-2], 9600);
-  }
-}

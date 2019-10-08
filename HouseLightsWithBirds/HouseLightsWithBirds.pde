@@ -32,6 +32,10 @@ WebsocketClient wsc;
 float DEBOUNCE_TIME_TOUCH = 500;
 float DEBOUNCE_TIME_UNTOUCH = 100;
 
+// Motor
+boolean bMotor = true;
+Serial arduinoPort;
+boolean motorOn = false;
 
 void setup() {
   size(1650, 1000);
@@ -59,6 +63,9 @@ void setup() {
   
   if (bUseWebsocket)
     wsc = new WebsocketClient(this, "ws://192.168.0.101:3333");
+    
+  if (bMotor)
+    connectArduino();
 }
 
 void draw() {
@@ -70,7 +77,6 @@ void draw() {
   f4.draw();
   noStroke(); fill(0);
   rect(321, 0, 100, height);
-  
   
   balls.update();
   pushMatrix();
@@ -104,6 +110,12 @@ void draw() {
   
   if (bUseBlinkyTape)
     lightBlinkyBirds();
+    
+  if (motorOn) {
+    fill(255); stroke(255);
+    textSize(32);
+    text("Motor ON", 110, 290);
+  }
 }
 void mousePressed() {
   float x = mouseX; //- offset.x;
@@ -159,7 +171,6 @@ void webSocketEvent(String msg) {
   else if (type == MsgType.UNTOUCH) {
     balls.onKeyRelease(id);
   }
-  
   println("END");
 }
 
@@ -168,6 +179,10 @@ void keyPressed() {
   Ball touchedBall = balls.onKeyPress(keyString);
   if (touchedBall != null)
     onPressed(touchedBall);
+  if (key == ' ') {
+    motorOn = true;
+    arduinoPort.write("1");
+  }
 }
 
 void keyReleased() {
@@ -175,4 +190,8 @@ void keyReleased() {
   Ball touchedBall = balls.onKeyRelease(keyString);
   if (touchedBall != null)
     onReleased(touchedBall);
+  if (key == ' ') {
+    motorOn = false;
+    arduinoPort.write("0");
+  }
 }
