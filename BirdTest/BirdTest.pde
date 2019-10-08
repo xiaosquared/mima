@@ -3,9 +3,9 @@ import processing.serial.*;
 
 Floor f1, f2, f3, f4;
 BirdManager birds;
-boolean bUseBlinkyTape = false;
+boolean bUseBlinkyTape = true;
 BlinkyTape blinkyTape;
-final int OUTPUT_COUNT = 23;
+final int OUTPUT_COUNT = 26;
 
 void setup() {
   size(425, 1000);
@@ -28,22 +28,15 @@ void draw() {
   f3.draw();
   f4.draw();
   birds.draw();
+  
+  if (bUseBlinkyTape)
+    lightBlinkyBirds();
 }
 
 void lightBlinkyBirds() {
-  ArrayList<Bird> birdlist = birds.getBirds();
-  blinkyTape.pushChannel(0);
-  for (int i = 0; i < OUTPUT_COUNT-1; i++) {
-    if (i >= 10 && i <= 15)
-      blinkyTape.pushChannel(0);
-    else {
-      int j = i;
-      if (i > 15)
-        j = i - 6;
-      Bird b = birdlist.get(j);
-      int val = b.getBrightness();
-      blinkyTape.pushChannel(val);
-    }
+  for (int i = 0; i < OUTPUT_COUNT; i++) {
+    int val = birds.getBrightnessForLightIndex(i);
+    blinkyTape.pushChannel(val);
   }
   blinkyTape.update(); 
 }
