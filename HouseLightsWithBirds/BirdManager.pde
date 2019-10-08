@@ -3,6 +3,7 @@ import java.util.Iterator;
 class BirdManager {
   ArrayList<Bird> birds;
   int numBirds;
+  int[] birdIndex;
   
   ArrayList<Cascade> cascades;
   
@@ -39,6 +40,34 @@ class BirdManager {
     numBirds = birds.size();
     
     cascades = new ArrayList<Cascade>();
+    
+    birdIndex = new int[OUTPUT_COUNT];
+    birdIndex[0] = 16;
+    birdIndex[1] = 17;
+    birdIndex[2] = 18;
+    birdIndex[3] = 19;
+    birdIndex[4] = 20;
+    birdIndex[5] = 21;
+    birdIndex[6] = -1;
+    birdIndex[7] = -1;
+    birdIndex[8] = 10;
+    birdIndex[9] = 11;
+    birdIndex[10] = 12;
+    birdIndex[11] = 13;
+    birdIndex[12] = 14;
+    birdIndex[13] = 15;
+    birdIndex[14] = -1;
+    birdIndex[15] = -1;
+    birdIndex[16] = 0;
+    birdIndex[17] = 1;
+    birdIndex[18] = 2;
+    birdIndex[19] = 3;
+    birdIndex[20] = 4;
+    birdIndex[21] = 5;
+    birdIndex[22] = 6;
+    birdIndex[23] = 7;
+    birdIndex[24] = 8;
+    birdIndex[25] = 9;
   }
   
   void addCascade(Cascade c) {
@@ -47,6 +76,13 @@ class BirdManager {
   
   void setBirdCharge(int id, boolean charge) {
     birds.get(id).setCharge(charge);
+  }
+  
+  int getBrightnessForLightIndex(int i) {
+    int bIndex = birdIndex[i];
+    if (bIndex < 0)
+      return 0;
+    else return birds.get(bIndex).getBrightness();
   }
   
   ArrayList<Bird> getBirds() {return birds; }

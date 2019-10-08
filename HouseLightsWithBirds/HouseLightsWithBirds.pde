@@ -15,7 +15,7 @@ BirdManager birds;
 BallManager balls;
 
 // House Lights
-boolean bSendToHouses = true;
+boolean bSendToHouses = false;
 final String mappingFile = "mapping_coordinates.csv";
 final String targetIp = "192.168.4.100";
 ArtNetClient artnet;
@@ -24,10 +24,10 @@ Mapper mapper;
 // Bird Lights
 boolean bUseBlinkyTape = true;
 BlinkyTape blinkyTape;
-final int OUTPUT_COUNT = 23;
+final int OUTPUT_COUNT = 26;
 
 // Sensors
-boolean bUseWebsocket = true;
+boolean bUseWebsocket = false;
 WebsocketClient wsc;
 float DEBOUNCE_TIME_TOUCH = 500;
 float DEBOUNCE_TIME_UNTOUCH = 100;
@@ -112,19 +112,9 @@ void mousePressed() {
 }
 
 void lightBlinkyBirds() {
-  ArrayList<Bird> birdlist = birds.getBirds();
-  blinkyTape.pushChannel(0);
-  for (int i = 0; i < OUTPUT_COUNT-1; i++) {
-    if (i >= 10 && i <= 15)
-      blinkyTape.pushChannel(0);
-    else {
-      int j = i;
-      if (i > 15)
-        j = i - 6;
-      Bird b = birdlist.get(j);
-      int val = b.getBrightness();
-      blinkyTape.pushChannel(val);
-    }
+  for (int i = 0; i < OUTPUT_COUNT; i++) {
+    int val = birds.getBrightnessForLightIndex(i);
+    blinkyTape.pushChannel(val);
   }
   blinkyTape.update(); 
 }
