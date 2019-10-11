@@ -3,8 +3,8 @@ import java.util.Iterator;
 class BirdManager {
   ArrayList<Bird> birds;
   int numBirds;
-  int[] birdIndex; 
-  
+  int[] birdIndex;
+
   BirdManager() {
     birds = new ArrayList<Bird>();
     birds.add(new Bird(166, 937));
@@ -13,28 +13,28 @@ class BirdManager {
     birds.add(new Bird(197, 895));
     birds.add(new Bird(218, 870));
     birds.add(new Bird(246, 852));
-    birds.add(new Bird(260, 839));    
+    birds.add(new Bird(260, 839));
     birds.add(new Bird(231, 823));
     birds.add(new Bird(194, 792));
     birds.add(new Bird(161, 760));
-    
+
     birds.add(new Bird(187, 698)); //10
     birds.add(new Bird(224, 670));
     birds.add(new Bird(256, 641));
     birds.add(new Bird(229, 620));
     birds.add(new Bird(194, 591));
     birds.add(new Bird(217, 549));
-    
+
     birds.add(new Bird(272, 379)); //16
     birds.add(new Bird(257, 392));
-    birds.add(new Bird(240, 410)); 
-    
+    birds.add(new Bird(240, 410));
+
     birds.add(new Bird(203, 341));
     birds.add(new Bird(188, 319));
     birds.add(new Bird(178, 296));
-  
+
     numBirds = birds.size();
-    
+
     birdIndex = new int[OUTPUT_COUNT];
     birdIndex[0] = 16;
     birdIndex[1] = 17;
@@ -63,7 +63,7 @@ class BirdManager {
     birdIndex[24] = 8;
     birdIndex[25] = 9;
   }
-  
+
   void setBirdLight(int x, int y) {
     for (Bird b : birds) {
       if (b.inBird(x, y))
@@ -72,23 +72,21 @@ class BirdManager {
         b.light = 0;
     }
   }
-  
+
   void setBirdCharge(int id, boolean charge) {
     birds.get(id).setCharge(charge);
   }
-  
+
   int getBrightnessForLightIndex(int i) {
     int bIndex = birdIndex[i];
     if (bIndex < 0)
       return 0;
-    else if (bIndex > 50)
-      return 200;
     else return birds.get(bIndex).getBrightness();
   }
-  
+
   ArrayList<Bird> getBirds() {return birds; }
-  int getNumBirds() { return numBirds; } 
-  
+  int getNumBirds() { return numBirds; }
+
   int getStartBird(int floor) {
     if (floor == 1) {
       return 0;
@@ -101,12 +99,12 @@ class BirdManager {
     }
     return 0;
   }
-  
+
   void run() {}
-  
+
   void draw() {
     for (Bird b : birds) {
-      b.draw(); 
+      b.draw();
     }
   }
 }

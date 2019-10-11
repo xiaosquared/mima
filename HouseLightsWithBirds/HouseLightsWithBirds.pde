@@ -22,7 +22,7 @@ ArtNetClient artnet;
 Mapper mapper;
 
 // Bird Lights
-boolean bUseBlinkyTape = true;
+boolean bUseBlinkyTape = false;
 BlinkyTape blinkyTape;
 final int OUTPUT_COUNT = 26;
 
@@ -33,7 +33,7 @@ float DEBOUNCE_TIME_TOUCH = 500;
 float DEBOUNCE_TIME_UNTOUCH = 100;
 
 // Motor
-boolean bMotor = true;
+boolean bMotor = false;
 Serial arduinoPort;
 boolean motorOn = false;
 
@@ -41,55 +41,55 @@ void setup() {
   size(1650, 1000);
   textAlign(CENTER, CENTER);
   Ani.init(this);
-  
+
   f1 = new Floor(-95, 640, "1F.jpg", 1);
-  f2 = new Floor(-80,400, "2F.jpg", 2); 
+  f2 = new Floor(-80,400, "2F.jpg", 2);
   f3 = new Floor(-60, 200, "3F.jpg", 3);
   f4 = new Floor(-50, 0, "4F.jpg", 4);
-  
+
   layout = loadImage("data/house_layout3.jpg");
   shelves = new Shelves();
   birds = new BirdManager();
   balls = new BallManager();
-  
+
   if (bUseBlinkyTape)
     connectBlinkyTape();
-  
+
   if (bSendToHouses) {
     artnet = new ArtNetClient(null);
     artnet.start();
     mapper = new Mapper(mappingFile, targetIp, offset);
   }
-  
+
   if (bUseWebsocket)
     wsc = new WebsocketClient(this, "ws://192.168.0.101:3333");
-    
+
   if (bMotor)
     connectArduino();
 }
 
 void draw() {
   background(0);
-  
+
   f1.draw();
   f2.draw();
   f3.draw();
   f4.draw();
   noStroke(); fill(0);
   rect(321, 0, 100, height);
-  
+
   balls.update();
   pushMatrix();
   translate(balls_offset.x, balls_offset.y);
   balls.draw();
   popMatrix();
-  
+
   pushMatrix();
   translate(bird_offset.x, bird_offset.y);
   birds.run();
   birds.draw();
   popMatrix();
- 
+
   fill(255, 200);
   ellipse(mouseX, mouseY, 50, 50);
 
@@ -99,7 +99,7 @@ void draw() {
   image(layout, 0, 0);
   shelves.draw();
   popMatrix();
-  
+
   if (bSendToHouses) {
     mapper.sample(artnet);
     pushMatrix();
@@ -107,10 +107,10 @@ void draw() {
     mapper.draw();
     popMatrix();
   }
-  
+
   if (bUseBlinkyTape)
     lightBlinkyBirds();
-    
+
   if (motorOn) {
     fill(255); stroke(255);
     textSize(32);
@@ -128,7 +128,7 @@ void lightBlinkyBirds() {
     int val = birds.getBrightnessForLightIndex(i);
     blinkyTape.pushChannel(val);
   }
-  blinkyTape.update(); 
+  blinkyTape.update();
 }
 
 void onPressed(Ball b) {
@@ -142,12 +142,12 @@ void onReleased(Ball b) {
   int floor = b.getFloor();
   if (floor >= 0 ) {
       int startBird = birds.getStartBird(floor);
-    
+
       if (!balls.touchingFloor(floor))
         birds.setBirdCharge(startBird, false);
-    
+
       float touchedInterval = b.getLastTouchedInterval();
-    
+
       Cascade c = new Cascade(startBird, birds.getNumBirds(), touchedInterval);
       birds.addCascade(c);
   }
@@ -158,15 +158,15 @@ void onReleased(Ball b) {
 void webSocketEvent(String msg) {
   MsgType type = MsgType.getType(msg);
   println(msg);
-  
+
   if (type == MsgType.OTHER)
     return;
-    
+
   String id = balls.getBallId(msg);
-  
+
   if (type == MsgType.TOUCH) {
     balls.onKeyPress(id);
-    
+
   }
   else if (type == MsgType.UNTOUCH) {
     balls.onKeyRelease(id);
