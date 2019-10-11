@@ -3,6 +3,7 @@ import de.looksgood.ani.easing.*;
 import ch.bildspur.artnet.*;
 import processing.serial.*;
 import websockets.*;
+import processing.video.*;
 
 Floor f1, f2, f3, f4;
 
@@ -37,8 +38,24 @@ boolean bMotor = false;
 Serial arduinoPort;
 boolean motorOn = false;
 
-void setup() {
+// Second screen
+ChildApplet child;
+PSurface controlSurface;
+
+// 4th floor projections
+Movie m_bg;
+Movie m_fg;
+PGraphics mask_left, mask_right, left, right;
+String foregroundPath = "July17_foreground.mp4";
+String backgroundPath = "July17_background.mp4";
+
+void settings() {
   size(1650, 1000);
+}
+
+void setup() {
+  child = new ChildApplet();
+
   textAlign(CENTER, CENTER);
   Ani.init(this);
 
@@ -66,54 +83,51 @@ void setup() {
 
   if (bMotor)
     connectArduino();
+
+  m_bg = new Movie(this, backgroundPath);
+  m_bg.loop();
+  m_bg.play();
+
+  m_fg = new Movie(this, foregroundPath);
+  m_fg.loop();
+  m_fg.play();
+
+  controlSurface = getSurface();
 }
 
 void draw() {
   background(0);
 
-  f1.draw();
-  f2.draw();
-  f3.draw();
-  f4.draw();
+  f1.draw(); f2.draw(); f3.draw(); f4.draw();
   noStroke(); fill(0);
   rect(321, 0, 100, height);
 
   balls.update();
-  pushMatrix();
-  translate(balls_offset.x, balls_offset.y);
-  balls.draw();
-  popMatrix();
+  pushMatrix(); translate(balls_offset.x, balls_offset.y);
+  balls.draw(); popMatrix();
 
   pushMatrix();
   translate(bird_offset.x, bird_offset.y);
-  birds.run();
-  birds.draw();
-  popMatrix();
+  birds.run(); birds.draw(); popMatrix();
 
   fill(255, 200);
   ellipse(mouseX, mouseY, 50, 50);
 
-  pushMatrix();
-  translate(offset.x, offset.y);
-  tint(255,64);
-  image(layout, 0, 0);
-  shelves.draw();
-  popMatrix();
+  pushMatrix(); translate(offset.x, offset.y);
+  tint(255,64); image(layout, 0, 0);
+  shelves.draw(); popMatrix();
 
   if (bSendToHouses) {
     mapper.sample(artnet);
-    pushMatrix();
-    translate(offset.x, offset.y);
-    mapper.draw();
-    popMatrix();
+    pushMatrix(); translate(offset.x, offset.y);
+    mapper.draw(); popMatrix();
   }
 
   if (bUseBlinkyTape)
     lightBlinkyBirds();
 
   if (motorOn) {
-    fill(255); stroke(255);
-    textSize(32);
+    fill(255); stroke(255); textSize(32);
     text("Motor ON", 110, 290);
   }
 }
@@ -193,5 +207,53 @@ void keyReleased() {
   if (key == ' ') {
     motorOn = false;
     arduinoPort.write("0");
+  }
+
+  if (key == 'h') {
+    controlSurface.setVisible(false);
+  }
+  if (key == 's') {
+    controlSurface.setVisible(true);
+  }
+}
+
+void movieEvent(Movie m) {
+  m.read();
+}
+
+////// Separate screen
+
+class ChildApplet extends PApplet {
+  public ChildApplet() {
+    super();
+    PApplet.runSketch(new String[]{this.getClass().getSimpleName()}, this);
+  }
+
+  public void settings() {
+    size(1920, 1080, P2D);
+
+  }
+
+  public void setup() {
+    surface.setTitle("second sketch");
+    blendMode(LIGHTEST);
+  }
+
+  public void draw() {
+    background(0);
+    if ((m_bg != null) && (m_fg != null)) {
+      image(m_bg, 0, 0, 1920, 1080, 0, 0, 1920, 1080);
+      image(m_fg, 0, 0, 1920, 1080, 0, 0, 1920, 1080);
+    }
+    text(frameRate, 10, 50);
+  }
+
+  void keyPressed() {
+    if (key == 'h') {
+      controlSurface.setVisible(false);
+    }
+    if (key == 's') {
+      controlSurface.setVisible(true);
+    }
   }
 }

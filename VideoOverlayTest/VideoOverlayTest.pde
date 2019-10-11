@@ -21,11 +21,11 @@ void setup() {
   blendMode(LIGHTEST);
   noSmooth();
   
-  m_fg = new Movie(this, "July17_foreground.mp4");
+  m_fg = new Movie(this, "Oct11_foreground.mp4");
   m_fg.loop();
   m_fg.play();
   
-  m_bg = new Movie(this, "July17_background.mp4");
+  m_bg = new Movie(this, "Oct11_background.mp4");
   m_bg.loop();
   m_bg.play();
   
