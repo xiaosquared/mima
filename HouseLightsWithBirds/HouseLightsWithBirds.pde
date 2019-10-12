@@ -6,6 +6,7 @@ import websockets.*;
 import processing.video.*;
 
 Floor f1, f2, f3, f4;
+PSurface controlSurface;
 
 PImage layout;
 PVector offset = new PVector(450, 200);
@@ -39,8 +40,7 @@ Serial arduinoPort;
 boolean motorOn = false;
 
 // Second screen
-ChildApplet child;
-PSurface controlSurface;
+ProjectionWindow projection;
 
 // 4th floor projections
 Movie m_bg;
@@ -54,7 +54,7 @@ void settings() {
 }
 
 void setup() {
-  child = new ChildApplet();
+  projection = new ProjectionWindow();
 
   textAlign(CENTER, CENTER);
   Ani.init(this);
@@ -89,8 +89,7 @@ void setup() {
   m_bg.play();
 
   m_fg = new Movie(this, foregroundPath);
-  m_fg.loop();
-  m_fg.play();
+  m_fg.play(); m_fg.stop();
 
   controlSurface = getSurface();
 }
@@ -168,7 +167,6 @@ void onReleased(Ball b) {
   shelves.onKeyRelease(b.id);
 }
 
-
 void webSocketEvent(String msg) {
   MsgType type = MsgType.getType(msg);
   println(msg);
@@ -185,7 +183,6 @@ void webSocketEvent(String msg) {
   else if (type == MsgType.UNTOUCH) {
     balls.onKeyRelease(id);
   }
-  println("END");
 }
 
 void keyPressed() {
@@ -196,6 +193,12 @@ void keyPressed() {
   if (key == ' ') {
     motorOn = true;
     arduinoPort.write("1");
+  }
+  else if (key == 'h') {
+    controlSurface.setVisible(false);
+  }
+  else if (key == 's') {
+    controlSurface.setVisible(true);
   }
 }
 
@@ -208,52 +211,10 @@ void keyReleased() {
     motorOn = false;
     arduinoPort.write("0");
   }
-
-  if (key == 'h') {
-    controlSurface.setVisible(false);
-  }
-  if (key == 's') {
-    controlSurface.setVisible(true);
-  }
 }
 
 void movieEvent(Movie m) {
+  if (m.equals(m_bg) && frameCount%2==0)
+    return;
   m.read();
-}
-
-////// Separate screen
-
-class ChildApplet extends PApplet {
-  public ChildApplet() {
-    super();
-    PApplet.runSketch(new String[]{this.getClass().getSimpleName()}, this);
-  }
-
-  public void settings() {
-    size(1920, 1080, P2D);
-
-  }
-
-  public void setup() {
-    surface.setTitle("second sketch");
-    blendMode(LIGHTEST);
-  }
-
-  public void draw() {
-    background(0);
-    if ((m_bg != null) && (m_fg != null)) {
-      image(m_bg, 0, 0, 1920, 1080, 0, 0, 1920, 1080);
-      image(m_fg, 0, 0, 1920, 1080, 0, 0, 1920, 1080);
-    }
-    text(frameRate, 10, 50);
-  }
-
-  void keyPressed() {
-    if (key == 'h') {
-      controlSurface.setVisible(false);
-    }
-    if (key == 's') {
-      controlSurface.setVisible(true);
-    }
-  }
 }
