@@ -46,8 +46,8 @@ ProjectionWindow projection;
 Movie m_bg;
 Movie m_fg;
 PGraphics mask_left, mask_right, left, right;
-String foregroundPath = "July17_foreground.mp4";
-String backgroundPath = "July17_background.mp4";
+String foregroundPath = "Oct14_foreground.mp4";
+String backgroundPath = "Oct14_background.mp4";
 
 void settings() {
   size(1650, 1000);
@@ -215,6 +215,8 @@ void keyReleased() {
 
 void movieEvent(Movie m) {
   if (m.equals(m_bg) && frameCount%2==0)
+    return;
+  if (m.equals(m_fg) && m.time() == m.duration())
     return;
   m.read();
 }
