@@ -54,7 +54,7 @@ void settings() {
 }
 
 void setup() {
-  projection = new ProjectionWindow();
+  projection = new ProjectionWindow(this);
 
   textAlign(CENTER, CENTER);
   Ani.init(this);
@@ -130,6 +130,7 @@ void draw() {
     text("Motor ON", 110, 290);
   }
 }
+
 void mousePressed() {
   float x = mouseX; //- offset.x;
   float y = mouseY; //- offset.y;
@@ -197,9 +198,9 @@ void keyPressed() {
   else if (key == 'h') {
     controlSurface.setVisible(false);
   }
-  else if (key == 's') {
-    controlSurface.setVisible(true);
-  }
+  // else if (key == 's') {
+  //   controlSurface.setVisible(true);
+  // }
 }
 
 void keyReleased() {

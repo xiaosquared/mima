@@ -6,6 +6,7 @@ char val;
 void setup() {
   pinMode(relayPin, OUTPUT);
   Serial.begin(9600);
+  digitalWrite(relayPin, LOW);
 }
 
 void loop() {
@@ -13,9 +14,9 @@ void loop() {
     val = Serial.read();
   }
   if (val == '1') {
-    digitalWrite(relayPin, HIGH);      
+    digitalWrite(relayPin, LOW);      
   } else {
-    digitalWrite(relayPin, LOW);
+    digitalWrite(relayPin, HIGH);
   }
   delay(10);
 }
