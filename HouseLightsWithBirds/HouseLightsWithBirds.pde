@@ -89,7 +89,7 @@ void setup() {
   m_bg.play();
 
   m_fg = new Movie(this, foregroundPath);
-  m_fg.play(); m_fg.stop();
+  m_fg.play(); m_fg.loop(); //m_fg.stop();
 
   controlSurface = getSurface();
 }

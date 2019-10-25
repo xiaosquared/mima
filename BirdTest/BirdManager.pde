@@ -36,6 +36,17 @@ class BirdManager {
     numBirds = birds.size();
 
     birdIndex = new int[OUTPUT_COUNT];
+    //birdIndex[0] = 0;
+    //birdIndex[1] = 1;
+    //birdIndex[2] = 2;
+    //birdIndex[3] = 3;
+    //birdIndex[4] = 4;
+    //birdIndex[5] = 5;
+    //birdIndex[6] = 6;
+    //birdIndex[7] = 7;
+    //birdIndex[8] = 8;
+    //birdIndex[9] = 9;
+    //birdIndex[10] = 10;
     birdIndex[0] = 16;
     birdIndex[1] = 17;
     birdIndex[2] = 18;
