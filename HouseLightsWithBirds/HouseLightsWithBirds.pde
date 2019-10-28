@@ -29,7 +29,8 @@ BlinkyTape blinkyTape;
 final int OUTPUT_COUNT = 26;
 
 // Sensors
-boolean bUseWebsocket = false;
+boolean bUseWebsocket =false;
+
 WebsocketClient wsc;
 float DEBOUNCE_TIME_TOUCH = 500;
 float DEBOUNCE_TIME_UNTOUCH = 100;

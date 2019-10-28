@@ -2,8 +2,8 @@ import de.looksgood.ani.*;
 import de.looksgood.ani.easing.*;
 import processing.serial.*;
 import websockets.*;
-import oscP5.*;
-import netP5.*;
+//import oscP5.*;
+//import netP5.*;
 
 Floor f1;
 Floor f2;
@@ -20,8 +20,8 @@ boolean bUseArduino = false;
 Serial arduinoPort;
 
 // for Unity
-OscP5 oscP5;
-NetAddress myRemoteLocation;
+//OscP5 oscP5;
+//NetAddress myRemoteLocation;
 
 void setup() {
   size(425,1000);
@@ -42,7 +42,7 @@ void setup() {
     wsc = new WebsocketClient(this, "ws://localhost:3333");
   
   // UNITY
-  oscP5 = new OscP5(this, 7000);
+  //oscP5 = new OscP5(this, 7000);
 }
 
 void draw() {
