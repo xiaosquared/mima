@@ -17,14 +17,14 @@ BirdManager birds;
 BallManager balls;
 
 // House Lights
-boolean bSendToHouses = false;
+boolean bSendToHouses = true;
 final String mappingFile = "mapping_coordinates.csv";
 final String targetIp = "192.168.4.100";
 ArtNetClient artnet;
 Mapper mapper;
 
 // Bird Lights
-boolean bUseBlinkyTape = false;
+boolean bUseBlinkyTape = true;
 BlinkyTape blinkyTape;
 final int OUTPUT_COUNT = 26;
 
@@ -36,7 +36,7 @@ float DEBOUNCE_TIME_TOUCH = 500;
 float DEBOUNCE_TIME_UNTOUCH = 100;
 
 // Motor
-boolean bMotor = false;
+boolean bMotor = true;
 Serial arduinoPort;
 boolean motorOn = false;
 
@@ -48,7 +48,7 @@ Movie m_bg;
 Movie m_fg;
 PGraphics mask_left, mask_right, left, right;
 String foregroundPath = "Oct14_foreground.mp4";
-String backgroundPath = "Oct28_backgroundc.mp4";
+String backgroundPath = "Oct28_backgroundk.mp4";
 
 void settings() {
   size(1650, 1000);
@@ -199,9 +199,9 @@ void keyPressed() {
   else if (key == 'h') {
     controlSurface.setVisible(false);
   }
-  // else if (key == 's') {
-  //   controlSurface.setVisible(true);
-  // }
+   else if (key == 's') {
+     controlSurface.setVisible(true);
+   }
 }
 
 void keyReleased() {

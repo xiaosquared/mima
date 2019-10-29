@@ -44,7 +44,7 @@ class BirdManager {
     birdIndex = new int[OUTPUT_COUNT];
     birdIndex[0] = 16;
     birdIndex[1] = 17;
-    birdIndex[2] = 18;
+    birdIndex[2] = -1;
     birdIndex[3] = 19;
     birdIndex[4] = 20;
     birdIndex[5] = 21;
@@ -56,7 +56,7 @@ class BirdManager {
     birdIndex[11] = 13;
     birdIndex[12] = 14;
     birdIndex[13] = 15;
-    birdIndex[14] = -1;
+    birdIndex[14] = 18;
     birdIndex[15] = -1;
     birdIndex[16] = 0;
     birdIndex[17] = 1;
