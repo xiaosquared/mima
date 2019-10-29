@@ -5,6 +5,7 @@ class ProjectionWindow extends PApplet {
   int mx = 0; int my = 0;
   int last_mx = 0; int last_my = 0;
   int diff_mx = 0; int diff_my = 0;
+  int x_right_offset = 96;
 
   HouseLightsWithBirds parent;
 
@@ -32,10 +33,10 @@ class ProjectionWindow extends PApplet {
     if (m_bg != null && m_fg != null) {
 
       image(m_bg, 0, 0, 1920, 1080, 0, 0, 1920, 1080);
-      image(m_bg, 1920, 0, 3840, 1080, 1920, 0, 3840, 1080);
+      image(m_bg, 1920+x_right_offset, 0, 1920, 1080, 1920, 0, 3840, 1080);
 
       image(m_fg, 0, 0, 1920, 1080, 0, 0, 1920, 1080);
-      image(m_fg, 1920, 0, 3840, 1080, 1920, 0, 3840, 1080);
+      image(m_fg, 1920+x_right_offset, 0, 1920, 1080, 1920, 0, 3840, 1080);
     }
     textSize(20);
     text(frameRate, 10, 50);
