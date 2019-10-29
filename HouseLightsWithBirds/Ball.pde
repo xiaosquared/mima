@@ -14,10 +14,13 @@ class Ball {
   TouchState touchState = TouchState.RELEASED;
   int touchInitTime = -100;
   int releaseInitTime = -100;
+  int releaseTime = 0;
   
   boolean touched = false;
   int lastTouchedTime = 0;
   int lastTouchedInterval = 0;
+  
+  int BETWEEN_TOUCH_TIMEOUT = 300;
   
   Ball(float x, float y, String letter, int floor) {
     position = new PVector(x, y);
@@ -39,9 +42,11 @@ class Ball {
       
       switch(touchState) {
         case RELEASED:
-          touchState = TouchState.TOUCH_INIT;
-          touchInitTime = currentTime;
-          releaseInitTime = currentTime + 10000;
+          if (currentTime - releaseTime > BETWEEN_TOUCH_TIMEOUT) {
+            touchState = TouchState.TOUCH_INIT;
+            touchInitTime = currentTime;
+            releaseInitTime = currentTime + 10000;
+          }
           break;
         case RELEASE_INIT:
           touchState = TouchState.TOUCHED;

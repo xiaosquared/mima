@@ -1,5 +1,7 @@
 class Bird {
   PVector position;
+  int id = 0;
+  
   float light = 0;
   float lightWidth = 15;
   
@@ -12,14 +14,24 @@ class Bird {
   boolean charging = false;
   float startTime = 0;
   float t = 0;
+  int MAX_CHARGE_TIME = 5000;
+  
+  boolean flewAway = false; // when you hold it for a long time and it flies away itself
+  
   
   Bird(float x, float y) {
     position = new PVector(x, y);
   }
   
+  void setId(int id) {
+    this.id = id;
+  }
+  
   void setCharge(boolean c) {
-    if (!charging && c)
+    if (!charging && c) {
       startTime = millis();
+      flewAway = false;  
+    }
     charging = c;
   }
   
@@ -47,11 +59,23 @@ class Bird {
       Ani.to(this, 0.7, "light", 0);
   }
   
+  void flyAway() {
+    Cascade c = new Cascade(id, birds.getNumBirds(), t);
+    birds.addCascade(c);
+    flewAway = true;    
+    charging = false;
+  }
+  
   void draw() {
     stroke(100);
     strokeWeight(1);
     if (charging) {
       t = millis() - startTime;
+      
+      if (t > MAX_CHARGE_TIME) {
+        flyAway();  
+      }
+      
       B = t/2000;
       if (B > READY_B) {
         B = STEADY_B;

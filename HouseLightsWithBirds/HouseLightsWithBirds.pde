@@ -17,14 +17,14 @@ BirdManager birds;
 BallManager balls;
 
 // House Lights
-boolean bSendToHouses = true;
+boolean bSendToHouses = false;
 final String mappingFile = "mapping_coordinates.csv";
 final String targetIp = "192.168.4.100";
 ArtNetClient artnet;
 Mapper mapper;
 
 // Bird Lights
-boolean bUseBlinkyTape = true;
+boolean bUseBlinkyTape = false;
 BlinkyTape blinkyTape;
 final int OUTPUT_COUNT = 26;
 
@@ -36,9 +36,8 @@ float DEBOUNCE_TIME_TOUCH = 500;
 float DEBOUNCE_TIME_UNTOUCH = 100;
 
 // Motor
-boolean bMotor = true;
-Serial arduinoPort;
-boolean motorOn = false;
+boolean bMotor = false;
+Machine machine;
 
 // Second screen
 ProjectionWindow projection;
@@ -48,14 +47,14 @@ Movie m_bg;
 Movie m_fg;
 PGraphics mask_left, mask_right, left, right;
 String foregroundPath = "Oct14_foreground.mp4";
-String backgroundPath = "Oct28_backgroundk.mp4";
+String backgroundPath = "Oct14_background.mp4";
 
 void settings() {
   size(1650, 1000);
 }
 
 void setup() {
-  projection = new ProjectionWindow(this);
+  //projection = new ProjectionWindow(this);
 
   textAlign(CENTER, CENTER);
   Ani.init(this);
@@ -83,14 +82,14 @@ void setup() {
     wsc = new WebsocketClient(this, "ws://192.168.0.101:3333");
 
   if (bMotor)
-    connectArduino();
+    machine = new Machine();
 
   m_bg = new Movie(this, backgroundPath);
   m_bg.loop();
   m_bg.play();
 
   m_fg = new Movie(this, foregroundPath);
-  m_fg.play(); m_fg.loop(); //m_fg.stop();
+  m_fg.play(); m_fg.stop();
 
   controlSurface = getSurface();
 }
@@ -126,9 +125,10 @@ void draw() {
   if (bUseBlinkyTape)
     lightBlinkyBirds();
 
-  if (motorOn) {
+  if (bMotor && machine.isOn()) {
     fill(255); stroke(255); textSize(32);
     text("Motor ON", 110, 290);
+    machine.run();
   }
 }
 
@@ -151,22 +151,27 @@ void onPressed(Ball b) {
   int myBird = birds.getStartBird(floor);
   birds.setBirdCharge(myBird, true);
   shelves.onKeyPress(b.id);
+  if (bMotor && floor == 3)
+    machine.onKeyPress();
 }
 
 void onReleased(Ball b) {
   int floor = b.getFloor();
   if (floor >= 0 ) {
       int startBird = birds.getStartBird(floor);
+      if (!birds.flewAway(startBird)) {
+        if (!balls.touchingFloor(floor))
+          birds.setBirdCharge(startBird, false);
 
-      if (!balls.touchingFloor(floor))
-        birds.setBirdCharge(startBird, false);
+        float touchedInterval = b.getLastTouchedInterval();
 
-      float touchedInterval = b.getLastTouchedInterval();
-
-      Cascade c = new Cascade(startBird, birds.getNumBirds(), touchedInterval);
-      birds.addCascade(c);
+        Cascade c = new Cascade(startBird, birds.getNumBirds(), touchedInterval);
+        birds.addCascade(c);
+      }
   }
   shelves.onKeyRelease(b.id);
+  if (bMotor && floor == 3)
+    machine.onKeyRelease();
 }
 
 void webSocketEvent(String msg) {
@@ -188,14 +193,11 @@ void webSocketEvent(String msg) {
 }
 
 void keyPressed() {
+  println("touch");
   String keyString = Character.toString(key);
   Ball touchedBall = balls.onKeyPress(keyString);
   if (touchedBall != null)
     onPressed(touchedBall);
-  if (key == ' ') {
-    motorOn = true;
-    arduinoPort.write("1");
-  }
   else if (key == 'h') {
     controlSurface.setVisible(false);
   }
@@ -209,10 +211,6 @@ void keyReleased() {
   Ball touchedBall = balls.onKeyRelease(keyString);
   if (touchedBall != null)
     onReleased(touchedBall);
-  if (key == ' ') {
-    motorOn = false;
-    arduinoPort.write("0");
-  }
 }
 
 void movieEvent(Movie m) {

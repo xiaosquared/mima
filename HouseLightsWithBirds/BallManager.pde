@@ -33,9 +33,9 @@ class BallManager {
     balls.add(new Ball(14, 407, "7", 3));
     balls.add(new Ball(14, 347, "8", 3));
     balls.add(new Ball(230, 347, "9", 3));
-    balls.add(new Ball(230, 278, "0", 3));
-    balls.add(new Ball(14, 181, "-", 4));
-    balls.add(new Ball(14, 118, "=", 4));
+    balls.add(new Ball(230, 278, "A", 3));
+    balls.add(new Ball(14, 181, "B", 4));
+    balls.add(new Ball(14, 118, "C", 4));
     
     ballsById = new HashMap<String, Ball>();
     for (Ball b : balls) {
@@ -75,6 +75,7 @@ class BallManager {
       else if (b.touchState == TouchState.RELEASE_INIT && (currentTime - b.releaseInitTime) > DEBOUNCE_TIME_UNTOUCH) {
         b.touchState = TouchState.RELEASED;
         b.lastTouchedInterval = currentTime - b.lastTouchedTime;
+        b.releaseTime = currentTime;
         onReleased(b);
       }
     }

@@ -47,9 +47,10 @@ void connectBlinkyTape() {
   }
 }
 
-void connectArduino() {
+Serial connectArduino(Serial myPort) {
   String[] serialPorts = listPorts();
   if (serialPorts.length > 0) {
-    arduinoPort = new Serial(this, serialPorts[serialPorts.length-2], 9600);
+    myPort = new Serial(this, serialPorts[serialPorts.length-2], 9600);
   }
+  return myPort;
 }

@@ -39,6 +39,10 @@ class BirdManager {
   
     numBirds = birds.size();
     
+    for (int i = 0; i < birds.size(); i ++) {
+      birds.get(i).setId(i);
+    }
+    
     cascades = new ArrayList<Cascade>();
     
     birdIndex = new int[OUTPUT_COUNT];
@@ -72,6 +76,10 @@ class BirdManager {
   
   void addCascade(Cascade c) {
     cascades.add(c);
+  }
+  
+  boolean flewAway(int id) {
+    return birds.get(id).flewAway;  
   }
   
   void setBirdCharge(int id, boolean charge) {

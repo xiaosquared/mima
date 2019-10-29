@@ -38,14 +38,16 @@ class ProjectionWindow extends PApplet {
       image(m_fg, 0, 0, 1920, 1080, 0, 0, 1920, 1080);
       image(m_fg, 1920+x_right_offset, 0, 1920, 1080, 1920, 0, 3840, 1080);
     }
-    textSize(20);
-    text(frameRate, 10, 50);
-    text(frameRate, 3700, 50);
+
+    // Debugging stuff
+    //textSize(20);
+    //text(frameRate, 10, 50);
+    //text(frameRate, 3700, 50);
     
-    textSize(30);
-    text("Current Mouse Click: " + mx + ", " + my, 300, 200);
-    text("Last Mouse Click: " + last_mx + ", " + last_my, 300, 250);
-    text("Diff: " + diff_mx + ", " + diff_my, 300, 300);
+    //textSize(30);
+    //text("Current Mouse Click: " + mx + ", " + my, 300, 200);
+    //text("Last Mouse Click: " + last_mx + ", " + last_my, 300, 250);
+    //text("Diff: " + diff_mx + ", " + diff_my, 300, 300);
 
     //stroke(255);
     //for(int i = 1; i < height/gridHeight; i++) {
