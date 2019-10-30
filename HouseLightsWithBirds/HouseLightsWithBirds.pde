@@ -29,7 +29,7 @@ BlinkyTape blinkyTape;
 final int OUTPUT_COUNT = 26;
 
 // Sensors
-boolean bUseWebsocket =true;
+boolean bUseWebsocket = false;
 
 WebsocketClient wsc;
 float DEBOUNCE_TIME_TOUCH = 500;
@@ -46,7 +46,7 @@ ProjectionWindow projection;
 Movie m_bg;
 Movie m_fg;
 PGraphics mask_left, mask_right, left, right;
-String foregroundPath = "Oct29_foreground.mp4";
+String foregroundPath = "Oct30_foreground.mp4";
 String backgroundPath = "Oct29_background.mp4";
 int fly_across_time = 9;
 
@@ -171,7 +171,7 @@ void onReleased(Ball b) {
       }
   }
   if (floor == 4 && m_fg.time() > fly_across_time) {
-    m_fg.jump(0);
+    m_fg.stop();
     m_fg.play();
   }
   shelves.onKeyRelease(b.id);
@@ -219,12 +219,5 @@ void keyReleased() {
 }
 
 void movieEvent(Movie m) {
-  if (m.equals(m_bg) && frameCount%2==0)
-    return;
-  if (m.equals(m_fg) && m.time() == m.duration())
-    return;
-  if (m.equals(m_fg)) {
-    println(m.time());
-  }
   m.read();
 }
