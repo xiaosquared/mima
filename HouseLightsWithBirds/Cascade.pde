@@ -4,7 +4,7 @@ class Cascade {
   int current;
 
   int startShelvesBird = 10;
-  int start4thFloorBird = 20;
+  int start4thFloorBird = 18;
 
   int currentTime = 0;
   int lastBirdTime = 0;
@@ -49,7 +49,7 @@ class Cascade {
         if (current == startShelvesBird) {
           startShelves = true;
         }
-        else if (current == start4thFloorBird) {
+        else if (current == start4thFloorBird && m_fg.time() > 20) {
           m_fg.jump(0);
           m_fg.play();
         }

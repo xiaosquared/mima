@@ -17,14 +17,14 @@ BirdManager birds;
 BallManager balls;
 
 // House Lights
-boolean bSendToHouses = false;
+boolean bSendToHouses = true;
 final String mappingFile = "mapping_coordinates.csv";
 final String targetIp = "192.168.4.100";
 ArtNetClient artnet;
 Mapper mapper;
 
 // Bird Lights
-boolean bUseBlinkyTape = false;
+boolean bUseBlinkyTape = true;
 BlinkyTape blinkyTape;
 final int OUTPUT_COUNT = 26;
 
@@ -36,7 +36,7 @@ float DEBOUNCE_TIME_TOUCH = 500;
 float DEBOUNCE_TIME_UNTOUCH = 100;
 
 // Motor
-boolean bMotor = false;
+boolean bMotor = true;
 Machine machine;
 
 // Second screen
@@ -47,14 +47,14 @@ Movie m_bg;
 Movie m_fg;
 PGraphics mask_left, mask_right, left, right;
 String foregroundPath = "Oct14_foreground.mp4";
-String backgroundPath = "Oct14_background.mp4";
+String backgroundPath = "Oct29_background.mp4";
 
 void settings() {
   size(1650, 1000);
 }
 
 void setup() {
-  //projection = new ProjectionWindow(this);
+  projection = new ProjectionWindow(this);
 
   textAlign(CENTER, CENTER);
   Ani.init(this);
@@ -89,7 +89,7 @@ void setup() {
   m_bg.play();
 
   m_fg = new Movie(this, foregroundPath);
-  m_fg.play(); m_fg.stop();
+  m_fg.play(); m_fg.stop(); m_fg.jump(22); 
 
   controlSurface = getSurface();
 }
@@ -218,5 +218,8 @@ void movieEvent(Movie m) {
     return;
   if (m.equals(m_fg) && m.time() == m.duration())
     return;
+  if (m.equals(m_fg)) {
+    println(m.time());
+  }
   m.read();
 }
