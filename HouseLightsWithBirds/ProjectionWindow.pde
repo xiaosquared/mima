@@ -5,6 +5,7 @@ class ProjectionWindow extends PApplet {
   int mx = 0; int my = 0;
   int last_mx = 0; int last_my = 0;
   int diff_mx = 0; int diff_my = 0;
+  int x_right_offset = 96;
 
   HouseLightsWithBirds parent;
 
@@ -27,23 +28,23 @@ class ProjectionWindow extends PApplet {
   }
 
   public void draw() {
-    if(frameCount==1) surface.setLocation(0,0);
+    if(frameCount==1) { 
+      surface.setLocation(0,0); 
+      noCursor();
+    }
     background(0);
     if (m_bg != null && m_fg != null) {
-
       image(m_bg, 0, 0, 1920, 1080, 0, 0, 1920, 1080);
-      image(m_bg, 1920, 0, 3840, 1080, 1920, 0, 3840, 1080);
+      image(m_bg, 1920+x_right_offset, 0, 1920, 1080, 1920, 0, 3840, 1080);
 
       image(m_fg, 0, 0, 1920, 1080, 0, 0, 1920, 1080);
-      image(m_fg, 1920, 0, 3840, 1080, 1920, 0, 3840, 1080);
-          text(m_fg.time(), 200, 200);
+      image(m_fg, 1920+x_right_offset, 0, 1920, 1080, 1920, 0, 3840, 1080);
     }
 
     // Debugging stuff
     //textSize(20);
     //text(frameRate, 10, 50);
     //text(frameRate, 3700, 50);
-
     
     //textSize(30);
     //text("Current Mouse Click: " + mx + ", " + my, 300, 200);
@@ -69,6 +70,7 @@ class ProjectionWindow extends PApplet {
       controlSurface.setVisible(true);
     }
     if (key == 'p') {
+      println("p");
       m_fg.jump(0);
       m_fg.play();
     }

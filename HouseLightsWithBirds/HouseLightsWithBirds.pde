@@ -29,7 +29,7 @@ BlinkyTape blinkyTape;
 final int OUTPUT_COUNT = 26;
 
 // Sensors
-boolean bUseWebsocket =false;
+boolean bUseWebsocket =true;
 
 WebsocketClient wsc;
 float DEBOUNCE_TIME_TOUCH = 500;
@@ -46,8 +46,9 @@ ProjectionWindow projection;
 Movie m_bg;
 Movie m_fg;
 PGraphics mask_left, mask_right, left, right;
-String foregroundPath = "Oct14_foreground.mp4";
+String foregroundPath = "Oct29_foreground.mp4";
 String backgroundPath = "Oct29_background.mp4";
+int fly_across_time = 9;
 
 void settings() {
   size(1650, 1000);
@@ -89,7 +90,7 @@ void setup() {
   m_bg.play();
 
   m_fg = new Movie(this, foregroundPath);
-  m_fg.play(); m_fg.stop(); m_fg.jump(22); 
+  m_fg.play();
 
   controlSurface = getSurface();
 }
@@ -168,6 +169,10 @@ void onReleased(Ball b) {
         Cascade c = new Cascade(startBird, birds.getNumBirds(), touchedInterval);
         birds.addCascade(c);
       }
+  }
+  if (floor == 4 && m_fg.time() > fly_across_time) {
+    m_fg.jump(0);
+    m_fg.play();
   }
   shelves.onKeyRelease(b.id);
   if (bMotor && floor == 3)

@@ -49,7 +49,7 @@ class Cascade {
         if (current == startShelvesBird) {
           startShelves = true;
         }
-        else if (current == start4thFloorBird && m_fg.time() > 20) {
+        else if (current == start4thFloorBird && m_fg.time() > fly_across_time) {
           m_fg.jump(0);
           m_fg.play();
         }
