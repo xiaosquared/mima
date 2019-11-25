@@ -29,10 +29,10 @@ BlinkyTape blinkyTape;
 final int OUTPUT_COUNT = 26;
 
 // Sensors
-boolean bUseWebsocket = false;
+boolean bUseWebsocket = true;
 
 WebsocketClient wsc;
-float DEBOUNCE_TIME_TOUCH = 500;
+float DEBOUNCE_TIME_TOUCH = 200;
 float DEBOUNCE_TIME_UNTOUCH = 100;
 
 // Motor
@@ -46,7 +46,7 @@ ProjectionWindow projection;
 Movie m_bg;
 Movie m_fg;
 PGraphics mask_left, mask_right, left, right;
-String foregroundPath = "Oct30_foreground.mp4";
+String foregroundPath = "Oct29_foreground.mp4";
 String backgroundPath = "Oct29_background.mp4";
 int fly_across_time = 9;
 
@@ -198,7 +198,7 @@ void webSocketEvent(String msg) {
 }
 
 void keyPressed() {
-  println("touch");
+
   String keyString = Character.toString(key);
   Ball touchedBall = balls.onKeyPress(keyString);
   if (touchedBall != null)

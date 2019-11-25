@@ -4,7 +4,7 @@ class Cascade {
   int current;
 
   int startShelvesBird = 10;
-  int start4thFloorBird = 18;
+  int start4thFloorBird = 22;
 
   int currentTime = 0;
   int lastBirdTime = 0;

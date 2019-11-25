@@ -38,8 +38,8 @@ void setup() {
   
   // SENSOR
   if (bUseWebsocket)
-    //wsc = new WebsocketClient(this, "ws://192.168.0.101:3333");
-    wsc = new WebsocketClient(this, "ws://localhost:3333");
+    wsc = new WebsocketClient(this, "ws://192.168.0.101:3333");
+    //wsc = new WebsocketClient(this, "ws://localhost:3333");
   
   // UNITY
   //oscP5 = new OscP5(this, 7000);
