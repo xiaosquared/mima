@@ -253,5 +253,11 @@ class Shelves {
       initActivateTime = 0;
   }
   
+  void allHousesOff() {
+    wallEast.allHousesOff();
+    wallSouth.allHousesOff();
+    wallNorth.allHousesOff();
+    wallWest.allHousesOff();
+  }
   
 }

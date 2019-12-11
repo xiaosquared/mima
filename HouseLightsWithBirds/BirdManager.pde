@@ -86,6 +86,12 @@ class BirdManager {
     birds.get(id).setCharge(charge);
   }
   
+  void allBirdsOff() {
+    for (Bird b : birds) {
+      b.light = 0;
+    }
+  }
+  
   int getBrightnessForLightIndex(int i) {
     int bIndex = birdIndex[i];
     if (bIndex < 0)

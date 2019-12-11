@@ -55,6 +55,7 @@ void settings() {
 }
 
 void setup() {
+  prepareExitHandler();
   projection = new ProjectionWindow(this);
 
   textAlign(CENTER, CENTER);
@@ -220,4 +221,17 @@ void keyReleased() {
 
 void movieEvent(Movie m) {
   m.read();
+}
+
+// for existing gracefully
+private void prepareExitHandler() {
+  Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+    public void run() {
+      machine.turnMotorOff();
+      birds.allBirdsOff();
+      lightBlinkyBirds();
+      mapper.allOff(artnet);
+    
+    }
+  }));
 }

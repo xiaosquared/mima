@@ -110,6 +110,14 @@ class Wall {
     }
   }
   
+  void allHousesOff() {
+    for (Row r : rows) {
+      for (House h : r.getHouses()) {
+        h.light = 0;
+      }
+    }
+  }
+  
   void draw() {
     pushMatrix();
     translate(xTrans, 0);

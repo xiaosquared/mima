@@ -83,6 +83,45 @@ class Mapper
     
     updatePixels();
   }
+  
+    void allOff(ArtNetClient client) {
+    loadPixels();
+    
+    Set< HashMap.Entry<Integer, ArrayList<Point> > > st = universes.entrySet();
+    for (HashMap.Entry<Integer, ArrayList<Point> > me : st)
+    {
+      ArrayList<Point> points = me.getValue(); // TODO: Does this copy the arraylist?
+      
+      Integer universe = me.getKey();
+      Integer dataLength = points.size()*6; // 3 16-bit values per point
+      
+      byte[] data = new byte[dataLength];
+      
+      // Sample the pixels for this universe
+      int i = 0;
+      for (Point p : points) {
+        byte val = 0;//byte(brightness(get(int(p.x+offset.x), int(p.y+offset.y))));
+        // Note: MBI6120 controllers accept data in reverse order, however the SuperSweet
+        // controller does not correct this automatically. Reverse the data first, then
+        // send it to the SuperSweet.
+        final int offset = dataLength - (i+1)*6;
+        
+        data[offset    ] = val;
+        data[offset + 1] = 0;
+        data[offset + 2] = val;
+        data[offset + 3] = 0;
+        data[offset + 4] = val;
+        data[offset + 5] = 0;
+        
+        i+= 1;
+      }
+      
+      client.unicastDmx(ipAddress, 0, universe, data);
+    }
+    
+    updatePixels();
+  }
+    
    
   void draw() {    
     colorMode(HSB, 100);
